@@ -2,8 +2,11 @@ import { prisma } from "../lib/prisma";
 import { Prisma } from "../generated/prisma/client";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
+import { cors } from "hono/cors";
 
 const app = new Hono();
+
+app.use("*", cors());
 
 app.get("/posts", async (c) => {
   // get all posts
