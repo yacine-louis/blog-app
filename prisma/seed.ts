@@ -1,31 +1,34 @@
 import { prisma } from "../lib/prisma";
+
 async function main() {
-  // Create a new user with a post
-  const user = await prisma.user.create({
-    data: {
-      name: "Alice",
-      email: "alice@prisma.io",
-      posts: {
-        create: {
-          title: "Hello World",
-          content: "This is my first post!",
-          published: true,
-        },
+  await prisma.post.deleteMany();
+
+  const posts = await prisma.post.createMany({
+    data: [
+      {
+        id: 1,
+        title: "Long Post #1",
+        body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+        userId: 1,
       },
-    },
-    include: {
-      posts: true,
-    },
+      {
+        id: 2,
+        title: "Long Post #2",
+        body: "Prisma makes database access easier by providing type-safe queries and a modern developer experience. This post contains well over one hundred characters.",
+        userId: 1,
+      },
+      {
+        id: 3,
+        title: "Short Post",
+        body: "Short post.",
+        userId: 1,
+      },
+    ],
   });
-  console.log("Created user:", user);
-  // Fetch all users with their posts
-  const allUsers = await prisma.user.findMany({
-    include: {
-      posts: true,
-    },
-  });
-  console.log("All users:", JSON.stringify(allUsers, null, 2));
+
+  console.log(`Created ${posts.count} posts`);
 }
+
 main()
   .then(async () => {
     await prisma.$disconnect();
