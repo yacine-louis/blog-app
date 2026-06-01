@@ -6,6 +6,14 @@ import { cors } from "hono/cors";
 
 const app = new Hono();
 
+function delay(time: number) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time);
+  });
+}
+
 app.use("*", cors());
 
 app.get("/posts", async (c) => {
@@ -19,9 +27,13 @@ app.get("/posts", async (c) => {
   });
 
   const trimmed = posts.map((post) => {
-    return { ...post, body: post.body.slice(0, 50) };
+    return {
+      ...post,
+      body: post.body.length > 50 ? post.body.slice(0, 50) + "..." : post.body,
+    };
   });
 
+  await delay(1000);
   return c.json({ status: "success", data: trimmed });
 });
 
@@ -42,7 +54,7 @@ app.get("/posts/:id", async (c) => {
   if (!post) {
     return c.json({ status: "error", message: "Post not found" }, 404);
   }
-
+  await delay(1000);
   return c.json({ status: "success", data: post });
 });
 
