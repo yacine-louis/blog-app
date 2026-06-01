@@ -12,7 +12,8 @@
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:generate": "npx prisma generate",
     "prisma:seed": "npx prisma db seed",
-    "prisma:studio": "npx -p better-sqlite3 -p prisma prisma studio --url file:./prisma/dev.db"
+    "prisma:studio": "npx -p better-sqlite3 -p prisma prisma studio --url file:./prisma/dev.db",
+    "server": "tsx ./server/index.js"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.8.0",
