@@ -14,6 +14,11 @@ function delay(time: number) {
   });
 }
 
+app.use("*", async (c, next) => {
+  await delay(500);
+  await next();
+});
+
 app.use("*", cors());
 
 app.get("/posts", async (c) => {
@@ -33,7 +38,6 @@ app.get("/posts", async (c) => {
     };
   });
 
-  await delay(1000);
   return c.json({ status: "success", data: trimmed });
 });
 
@@ -54,7 +58,6 @@ app.get("/posts/:id", async (c) => {
   if (!post) {
     return c.json({ status: "error", message: "Post not found" }, 404);
   }
-  await delay(1000);
   return c.json({ status: "success", data: post });
 });
 

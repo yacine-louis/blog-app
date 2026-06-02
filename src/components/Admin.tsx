@@ -1,6 +1,7 @@
 import { NavLink } from "react-router";
 import usePosts from "../hooks/usePosts";
 import CreatePost from "./CreatePost";
+import DeletePost from "./DeletePost";
 
 export default function Admin() {
   const { data, isLoading, error } = usePosts();
@@ -25,7 +26,7 @@ export default function Admin() {
                 </h2>
               </li>
             </NavLink>
-            <button className="ml-4 cursor-pointer"> delete</button>
+            <DeletePost postId={post.id} />
           </div>
         ))}
       </div>
