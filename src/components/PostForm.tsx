@@ -1,17 +1,18 @@
 import { useState } from "react";
 import type { PostFormProps, PostFormValues } from "../types/shared";
 
+const defaultFormValues = {
+  title: "",
+  body: "",
+};
+
 export default function PostForm({
-  initialData,
+  initialValues = defaultFormValues,
   onSubmit,
-  submitText = "Submit",
+  submitText,
+  clearOnSubmit,
 }: PostFormProps) {
-  const [values, setValues] = useState<PostFormValues>(
-    initialData ?? {
-      title: "",
-      body: "",
-    },
-  );
+  const [values, setValues] = useState<PostFormValues>(initialValues);
 
   const setValue = <K extends keyof PostFormValues>(
     field: K,
@@ -21,6 +22,9 @@ export default function PostForm({
   };
 
   async function handleSubmit(e: React.SubmitEvent) {
+    if (clearOnSubmit) {
+      setValues(defaultFormValues);
+    }
     e.preventDefault();
 
     await onSubmit(values);

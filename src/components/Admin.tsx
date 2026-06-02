@@ -1,23 +1,25 @@
 import { NavLink } from "react-router";
 import usePosts from "../hooks/usePosts";
-import CreatePost from "./CreatePost";
 import DeletePost from "./DeletePost";
+import { useCreatePost } from "../hooks/useCreatePost";
+import PostForm from "./PostForm";
 
 export default function Admin() {
-  const { data, isLoading, error } = usePosts();
+  const postsQuery = usePosts();
+  const { mutate: createPost } = useCreatePost();
 
-  if (isLoading) {
+  if (postsQuery.isLoading) {
     return <>Loading...</>;
   }
 
-  if (!data || error) {
+  if (!postsQuery.data || postsQuery.error) {
     return <>Error</>;
   }
 
   return (
     <>
       <div className="ml-3">
-        {data.map((post) => (
+        {postsQuery.data.map((post) => (
           <div key={post.id} className="flex">
             <NavLink to={"blog/" + post.id}>
               <li>
@@ -31,7 +33,8 @@ export default function Admin() {
         ))}
       </div>
       <hr />
-      <CreatePost />
+      <h2>Create new Post</h2>
+      <PostForm submitText="Create Post" clearOnSubmit onSubmit={createPost} />
     </>
   );
 }

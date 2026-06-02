@@ -1,28 +1,14 @@
-import { useState } from "react";
-import type { Post, PostFormValues } from "../types/shared";
+import type { Post } from "../types/shared";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useUpdatePost(postId: number) {
-  const [data, setData] = useState<Post | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  const mutate = async (values: PostFormValues) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const post: Post = { ...values, id: postId };
-      const updatedPost = await UpdatePost(post);
-      setData(updatedPost);
-    } catch (e) {
-      if (e instanceof Error) {
-        setError(e);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return { mutate, data, isLoading, error, isError: !!error };
+export function useUpdatePost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: UpdatePost,
+    onSuccess: (post) => {
+      queryClient.invalidateQueries({ queryKey: ["posts", post.id] });
+    },
+  });
 }
 
 async function UpdatePost(post: Post): Promise<Post> {

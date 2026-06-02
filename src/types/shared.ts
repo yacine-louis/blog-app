@@ -8,7 +8,8 @@ export type Post = {
 export type PostFormValues = Pick<Post, "body" | "title">;
 
 export type PostFormProps = {
-  initialData?: PostFormValues;
+  initialValues?: PostFormValues;
   onSubmit: (data: PostFormValues) => void | Promise<void>;
-  submitText?: string;
+  submitText: string;
+  clearOnSubmit: boolean;
 };
