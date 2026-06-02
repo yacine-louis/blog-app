@@ -4,3 +4,11 @@ export type Post = {
   title: string;
   userId?: number;
 };
+
+export type PostFormValues = Pick<Post, "body" | "title">;
+
+export type PostFormProps = {
+  initialData?: PostFormValues;
+  onSubmit: (data: PostFormValues) => void | Promise<void>;
+  submitText?: string;
+};

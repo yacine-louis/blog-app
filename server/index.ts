@@ -60,7 +60,7 @@ app.get("/posts/:id", async (c) => {
 
 app.post("/posts", async (c) => {
   // create post
-  const body = await c.req.parseBody();
+  const body = await c.req.json();
   const postTitle = body["title"];
   const postBody = body["body"];
 
@@ -87,7 +87,7 @@ app.patch("/posts/:id", async (c) => {
     return c.json({ status: "error" }, 400);
   }
 
-  const body = await c.req.parseBody();
+  const body = await c.req.json();
   const postTitle = body["title"];
   const postBody = body["body"];
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { type Post } from "../types/shared";
+import type { Post } from "../types/shared";
 
 export default function usePost(postId: number) {
   const [data, setData] = useState<Post | null>(null);

@@ -1,10 +1,11 @@
 import { useParams } from "react-router";
 import usePost from "../hooks/usePost";
 import NotFound from "./NotFound";
+import EditPost from "./EditPost";
+import BlogPost from "./BlogPost";
 
-export default function PostPage() {
+export default function AdminPost() {
   const { postId } = useParams();
-  console.log(postId);
   const id = Number(postId);
   const isInvalidId = Number.isNaN(id);
 
@@ -25,15 +26,10 @@ export default function PostPage() {
   if (!data) {
     return <>Error: No data</>;
   }
-
   return (
-    <div
-      key={data.id}
-      className="rounded-xl border border-gray-200 bg-white p-4 "
-    >
-      <h2 className="text-5xl font-semibold text-gray-900">{data.title}</h2>
-
-      <p className="mt-2 text-gray-600 line-clamp-3">{data.body}</p>
-    </div>
+    <>
+      <EditPost postId={id} />
+      <BlogPost />
+    </>
   );
 }
