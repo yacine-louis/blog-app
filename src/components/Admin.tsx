@@ -10,8 +10,8 @@ export default function Admin() {
     return <>Loading...</>;
   }
 
-  if (error) {
-    return <>Error: {error.message}</>;
+  if (!data || error) {
+    return <>Error</>;
   }
 
   return (

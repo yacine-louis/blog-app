@@ -15,7 +15,7 @@ function delay(time: number) {
 }
 
 app.use("*", async (c, next) => {
-  await delay(500);
+  await delay(1000);
   await next();
 });
 

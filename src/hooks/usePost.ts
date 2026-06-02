@@ -1,28 +1,18 @@
-import { useEffect, useState } from "react";
 import type { Post } from "../types/shared";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function usePost(postId: number) {
-  const [data, setData] = useState<Post | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const loadPosts = async () => {
-      try {
-        const fetchedPost = await fetchPost(postId);
-        setData(fetchedPost);
-        setIsLoading(false);
-      } catch (e) {
-        if (e instanceof Error) {
-          setError(e);
-        }
-        setIsLoading(false);
-      }
-    };
-    loadPosts();
-  }, [postId]);
-
-  return { data, isLoading, error, isError: !!error };
+  return useQuery({
+    queryKey: ["posts", postId],
+    queryFn: () => fetchPost(postId),
+    initialData: () => {
+      const posts = queryClient.getQueryData<Post[]>(["posts"]);
+      return posts?.find((post) => post.id === postId);
+    },
+    refetchOnWindowFocus: false,
+  });
 }
 
 async function fetchPost(postId: number): Promise<Post> {

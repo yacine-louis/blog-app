@@ -25,7 +25,6 @@ export function useCreatePost() {
 }
 
 async function createPost(post: PostFormValues) {
-  console.log(post);
   const response = await fetch("http://localhost:3000/posts", {
     method: "POST",
     headers: {
