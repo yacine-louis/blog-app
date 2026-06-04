@@ -2,7 +2,7 @@ import usePost from "../hooks/usePost";
 
 export default function BlogPostView({ postId }: { postId: number }) {
   const { data, isLoading, error } = usePost(postId);
-
+  console.log(data);
   if (isLoading) {
     return <>Loading...</>;
   }

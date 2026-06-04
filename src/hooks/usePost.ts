@@ -1,5 +1,6 @@
 import type { Post } from "../types/shared";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { postsOptions } from "./usePosts";
 
 export default function usePost(postId: number) {
   const queryClient = useQueryClient();
@@ -8,10 +9,9 @@ export default function usePost(postId: number) {
     queryKey: ["posts", postId],
     queryFn: () => fetchPost(postId),
     initialData: () => {
-      const posts = queryClient.getQueryData<Post[]>(["posts"]);
+      const posts = queryClient.getQueryData(postsOptions().queryKey);
       return posts?.find((post) => post.id === postId);
     },
-    refetchOnWindowFocus: false,
   });
 }
 
