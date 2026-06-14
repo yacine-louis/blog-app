@@ -6,16 +6,15 @@ import { cors } from "hono/cors";
 
 const app = new Hono();
 
-function delay(time: number) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-}
+// function delay(time: number) {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve(true);
+//     }, time);
+//   });
+// }
 
 app.use("*", async (c, next) => {
-  await delay(1000);
   await next();
 });
 

@@ -1,10 +1,15 @@
-import { useState } from "react";
-import type { PostFormProps, PostFormValues } from "../types/shared";
+import type { PostFormProps } from "../types/shared";
+import { z } from "zod";
 
 const defaultFormValues = {
   title: "",
   body: "",
 };
+
+const formDataSchema = z.object({
+  title: z.string(),
+  body: z.string(),
+});
 
 export default function PostForm({
   initialValues = defaultFormValues,
@@ -12,22 +17,23 @@ export default function PostForm({
   submitText,
   clearOnSubmit,
 }: PostFormProps) {
-  const [values, setValues] = useState<PostFormValues>(initialValues);
-
-  const setValue = <K extends keyof PostFormValues>(
-    field: K,
-    value: PostFormValues[K],
-  ) => {
-    setValues((old) => ({ ...old, [field]: value }));
-  };
-
   async function handleSubmit(e: React.SubmitEvent) {
-    if (clearOnSubmit) {
-      setValues(defaultFormValues);
-    }
     e.preventDefault();
+    const formData = new FormData(e.target);
+    const values = {
+      title: formData.get("title"),
+      body: formData.get("body"),
+    };
 
-    await onSubmit(values);
+    const result = formDataSchema.safeParse(values);
+    if (!result.success) {
+      return;
+    }
+    await onSubmit(result.data);
+
+    if (clearOnSubmit) {
+      e.target.reset();
+    }
   }
 
   return (
@@ -38,16 +44,16 @@ export default function PostForm({
       <input
         type="text"
         placeholder="Title"
-        value={values.title}
-        onChange={(e) => setValue("title", e.target.value)}
         className="border rounded p-2"
+        defaultValue={initialValues.title}
+        name="title"
       />
 
       <textarea
         placeholder="Body"
-        value={values.body}
-        onChange={(e) => setValue("body", e.target.value)}
         className="border rounded p-2 min-h-40"
+        defaultValue={initialValues.body}
+        name="body"
       />
 
       <button type="submit" className="bg-blue-500 text-white rounded p-2">
